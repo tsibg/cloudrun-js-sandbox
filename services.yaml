@@ -1,0 +1,38 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+  name: sandbox-quickjs
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: '2'
+        run.googleapis.com/startup-cpu-boost: 'true'
+    spec:
+      containerConcurrency: 10
+      timeoutSeconds: 120
+      containers:
+      - image: eu.gcr.io/preparsed/sandbox-quickjs:latest
+        ports:
+        - name: http1
+          containerPort: 8081
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 128Mi
+        livenessProbe:
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+          periodSeconds: 900
+          failureThreshold: 1
+          httpGet:
+            path: /health
+            port: 8081
+        startupProbe:
+          initialDelaySeconds: 0
+          timeoutSeconds: 240
+          periodSeconds: 240
+          failureThreshold: 1
+          tcpSocket:
+            port: 8081

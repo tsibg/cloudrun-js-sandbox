@@ -1,0 +1,9 @@
+export const config = {
+    RUNTIME_MEMORY_LIMIT: 10 * 1024 * 1024,
+    RUNTIME_STACK_SIZE: 1024 * 1024,
+    RUNTIME_TIMEOUT: 2000,
+
+    WORKER_TIMEOUT: 2500,
+
+    VERSION: '0.0.1'
+};
