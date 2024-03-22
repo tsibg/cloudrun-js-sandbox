@@ -1,7 +1,7 @@
 import { config } from "./config.js";
 import { response } from "./helpers/utils.js";
 
-let workers = [];
+let workers = {};
 
 const startAsync = (requestId, code, scriptFile = null) => {
   return new Promise((resolve) => {
@@ -34,19 +34,19 @@ const start = async (requestId, code, scriptFile = null, cb) => {
       },
     }
   );
-  let new_worker_timeout = setTimeout(() => {
-    new_worker.terminate();
+  console.log(new_worker);
+  const new_worker_timeout = setTimeout(() => {
+    workers[requestId].terminate();
     console.log(`[${requestId}] Worker Timeout: Terminating worker`);
-    workers = workers.filter((w) => w !== new_worker);
+    delete workers[requestId];
     cb(response({ name: "Worker Timeout", message: `Timeout of ${config.WORKER_TIMEOUT} exceeded.` }, null, [], Date.now() - startTime));
   }, config.WORKER_TIMEOUT);
 
-  new_worker.postMessage({ requestId, code });
 
   new_worker.onmessage = (evt) => {
     // console.log("Received by parent: ", evt.data);
     new_worker_timeout && clearTimeout(new_worker_timeout);
-    workers = workers.filter((w) => w !== new_worker);
+    delete workers[requestId];
 
     cb(evt.data);
   };
@@ -54,17 +54,17 @@ const start = async (requestId, code, scriptFile = null, cb) => {
     console.error(`[${requestId}] Worker Error: `, err);
 
     new_worker_timeout && clearTimeout(new_worker_timeout);
-    workers = workers.filter((w) => w !== new_worker);
+    delete workers[requestId];
 
-    cb(response({ name: "Worker Error", message: err.toString() }, null, [], Date.now() - startTime));
+    cb(response({ name: "Worker Error", message: err.message }, null, [], Date.now() - startTime));
   };
 
-
-  workers.push(new_worker);
+  new_worker.postMessage({ requestId, code });
+  workers[requestId] = new_worker;
 }
 
 const getExecutorsCount = () => {
-  return workers.length;
+  return Object.keys(workers).length;
 }
 
 const readScriptFile = async (requestId, filename) => {

@@ -36,7 +36,7 @@ const router = new Router()
         }, null, 2);
         console.info(`[${ctx.state[REQUEST_ID]}] /health :`, JSON.stringify(memoryUsage));
     })
-    .post("/execute", async (ctx,) => {
+    .post("/execute", async (ctx) => {
         const requestId = ctx.state[REQUEST_ID];
         let fileName = getQuery(ctx)?.file;
         const postParams = await getPostParams(ctx);
