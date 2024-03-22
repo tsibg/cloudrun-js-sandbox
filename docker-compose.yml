@@ -12,6 +12,6 @@ services:
       - PORT=8080
     # networks:
     # - intranet
-networks:
-  intranet:
-    internal: true
+# networks:
+#   intranet:
+#     internal: true

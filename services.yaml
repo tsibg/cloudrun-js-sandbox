@@ -10,17 +10,17 @@ spec:
         autoscaling.knative.dev/maxScale: '2'
         run.googleapis.com/startup-cpu-boost: 'true'
     spec:
-      containerConcurrency: 10
+      containerConcurrency: 50
       timeoutSeconds: 120
       containers:
       - image: eu.gcr.io/preparsed/sandbox-quickjs:latest
         ports:
         - name: http1
-          containerPort: 8081
+          containerPort: 8080
         resources:
           limits:
             cpu: 1000m
-            memory: 128Mi
+            memory: 256Mi
         livenessProbe:
           initialDelaySeconds: 30
           timeoutSeconds: 30
@@ -28,11 +28,11 @@ spec:
           failureThreshold: 1
           httpGet:
             path: /health
-            port: 8081
+            port: 8080
         startupProbe:
           initialDelaySeconds: 0
           timeoutSeconds: 240
           periodSeconds: 240
           failureThreshold: 1
           tcpSocket:
-            port: 8081
+            port: 8080

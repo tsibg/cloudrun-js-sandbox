@@ -25,7 +25,7 @@ steps:
 #Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', '${_IMAGE_NAME}', '--all-tags']
-#Deploy container image to Cloud Run
+# Deploy container image to Cloud Run
 - name: 'gcr.io/cloud-builders/gcloud-slim'
   entrypoint: gcloud
   args:
@@ -33,21 +33,24 @@ steps:
   - 'deploy'
   - '${_SERVICE_NAME}'
   - '--image'
-  - 'eu.gcr.io/$PROJECT_ID/${_SERVICE_NAME}:${BUILD_ID}'
+  - '${_IMAGE_BUILD}'
   - '--region'
   - '${_REGION}'
   - '--platform'
   - 'managed'
+# Set the service configuration
 - name: 'gcr.io/cloud-builders/gcloud-slim'
   entrypoint: gcloud
   args: [
     'run', 'services',
     'replace','services.yaml',
-    '--region', '${_REGION}'
+    '--region', '${_REGION}',
+    '--platform', 'managed'
   ]
 substitutions:
     _SERVICE_NAME: 'sandbox-quickjs'
     _IMAGE_NAME: 'eu.gcr.io/${PROJECT_ID}/${_SERVICE_NAME}'
+    _IMAGE_BUILD: 'eu.gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${BUILD_ID}'
     _REGION: 'europe-west1'
 # images:
 #   - "${_IMAGE_NAME}:latest"

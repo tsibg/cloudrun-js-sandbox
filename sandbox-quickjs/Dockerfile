@@ -1,6 +1,6 @@
 FROM denoland/deno:alpine
 
-WORKDIR /usr/app
+WORKDIR /usr/src/app
 
 
 ## SETUP NETWORK RESTRICTION 
@@ -21,7 +21,7 @@ RUN deno cache main.js
 USER deno
 
 ENV HOST="0.0.0.0"
-ENV PORT 8081
+ENV PORT 8080
 
 # The port that your application listens to.
 EXPOSE ${PORT}

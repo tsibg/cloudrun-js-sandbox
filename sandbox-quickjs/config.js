@@ -8,5 +8,5 @@ export const config = {
 
     WORKER_TIMEOUT: 2500,
 
-    VERSION: '0.0.2'
+    VERSION: '0.0.3'
 };
