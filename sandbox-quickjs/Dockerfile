@@ -1,15 +1,11 @@
 FROM denoland/deno:alpine
 
-WORKDIR /app
+WORKDIR /usr/app
 
 
 ## SETUP NETWORK RESTRICTION 
 #@DEPRECATED
 # Install system dependencies
-#RUN apk add --update curl iptables sudo
-# Run network restriction script
-#COPY docker-scripts/restrict_network.sh /app/restrict_network.sh
-#RUN sudo /app/restrict_network.sh -- ifconfig
 
 # Cache the dependencies as a layer (the following two steps are re-run only when deps.ts is modified).
 # Ideally cache deps.ts will download and compile _all_ external files used in main.ts.

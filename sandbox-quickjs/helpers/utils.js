@@ -1,3 +1,4 @@
+import { config } from "../config.js";
 
 const REQUEST_ID = "X-Request-ID";
 
@@ -33,24 +34,35 @@ const getMemoryUsage = () => {
 const checkEnvironment = () => {
     try {
         const env = Deno.env.toObject();
-        console.warn("WARN: ENVIRONMENT Variables are ENABLED. " + env.length + "variables found");
+        console.warn("WARNING: ENVIRONMENT Variables are ENABLED. " + env.length + "variables found");
         return env;
     } catch (err) {
-        console.log("Environment variables DISABLED");
+        console.info("Environment variables DISABLED");
         return false;
     }
 }
 
-const requestIdMiddleware = async (ctx) => {
-    if (ctx.state[REQUEST_ID]) return;
-    const reqId = crypto.randomUUID().split("-", 1);
-    ctx.state[REQUEST_ID] = reqId;
-    ctx.response.headers.set(REQUEST_ID, reqId);
+const requestIdMiddleware = async (ctx, next) => {
+    if (!ctx.state[REQUEST_ID]) {
+        const reqId = crypto.randomUUID().split("-", 1);
+        ctx.state[REQUEST_ID] = reqId;
+        ctx.response.headers.set(REQUEST_ID, reqId);
+    }
+    await next();
 };
 
+const checkConnection = async (port) => {
+    try {
+        const res = await fetch(`http://portquiz.net:${port}`);
+        return res.ok ? { ok: true } : { ok: false, message: "Connection refused" };
+    } catch (err) {
+        return { ok: false, message: err.name };
+    }
+}
+
 const getHostPort = () => {
-    let HOST = "127.0.0.1";
-    let PORT = 8081;
+    let HOST = config.DEFAULT_HOST;
+    let PORT = config.DEFAULT_PORT;
 
     try {
         HOST = Deno.env.get("HOST") || "127.0.0.1";
@@ -82,5 +94,6 @@ export {
     checkEnvironment,
     getHostPort,
     requestIdMiddleware,
-    response
+    response,
+    checkConnection
 };

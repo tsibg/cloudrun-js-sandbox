@@ -1,0 +1,17 @@
+version: '3'
+services:
+  sandbox-quickjs:
+    build:
+      context: ./sandbox-quickjs/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - HOST=sandbox-quickjs
+      - PORT=8080
+    # networks:
+    # - intranet
+networks:
+  intranet:
+    internal: true

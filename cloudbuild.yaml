@@ -21,7 +21,7 @@ steps:
     '-t', '${_IMAGE_NAME}:latest',
     '-t', '${_IMAGE_NAME}:${BUILD_ID}',
     '--cache-from', '${_IMAGE_NAME}:latest',
-    '.']
+    'sandbox-quickjs/.']
 #Push the container image to Container Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', '${_IMAGE_NAME}', '--all-tags']
