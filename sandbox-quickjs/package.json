@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "deno run --watch --deny-env --allow-env=PORT,HOST --allow-read=. --allow-net=0.0.0.0:8080 --unstable-worker-options --no-prompt main.js",
-    "dev-docker": "docker run eu.gcr.io/preparsed/sandbox-deno:latest"
+    "dev-docker": "docker run eu.gcr.io/preparsed/sandbox-deno:latest",
+    "test": "deno test --allow-env=PORT,HOST --allow-read=. --allow-net=0.0.0.0,127.0.0.1,deno.land,jsr.io --unstable-worker-options --no-prompt"
   },
   "author": "Tsvetomir Iliev (dev.tsibg@gmail.com)",
   "license": "ISC"

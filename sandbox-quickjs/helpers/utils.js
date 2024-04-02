@@ -1,4 +1,4 @@
-import { config } from "../config.js";
+import { config } from "../app/config.js";
 
 const REQUEST_ID = "X-Request-ID";
 

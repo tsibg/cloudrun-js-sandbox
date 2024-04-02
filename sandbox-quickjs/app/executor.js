@@ -1,5 +1,5 @@
 import { config } from "./config.js";
-import { response } from "./helpers/utils.js";
+import { response } from "../helpers/utils.js";
 
 let workers = {};
 
@@ -17,31 +17,31 @@ const start = async (requestId, code, scriptFile = null, cb) => {
     code += await readScriptFile(requestId, scriptFile);
   }
   console.log(`[${requestId}] Starting worker`);
-  const new_worker = new Worker(import.meta.resolve("./sandbox-worker.js"),
+  const new_worker = new Worker(import.meta.resolve("../worker/sandbox-worker.js"),
     {
       type: "module",
       deno: {
-        namespace: false,
+        namespace: true,
         permissions: {
           env: false,
           hrtime: false,
           net: false,
           ffi: false,
-          read: ["."],
+          read: ["./"],
           run: false,
           write: false,
         },
       },
     }
   );
-  console.log(new_worker);
+  workers[requestId] = new_worker;
+
   const new_worker_timeout = setTimeout(() => {
     workers[requestId].terminate();
     console.log(`[${requestId}] Worker Timeout: Terminating worker`);
     delete workers[requestId];
     cb(response({ name: "Worker Timeout", message: `Timeout of ${config.WORKER_TIMEOUT} exceeded.` }, null, [], Date.now() - startTime));
   }, config.WORKER_TIMEOUT);
-
 
   new_worker.onmessage = (evt) => {
     // console.log("Received by parent: ", evt.data);
@@ -56,11 +56,10 @@ const start = async (requestId, code, scriptFile = null, cb) => {
     new_worker_timeout && clearTimeout(new_worker_timeout);
     delete workers[requestId];
 
-    cb(response({ name: "Worker Error", message: err.message }, null, [], Date.now() - startTime));
+    cb(response({ name: "Worker Error", message: err.name }, null, [], Date.now() - startTime));
   };
 
-  new_worker.postMessage({ requestId, code });
-  workers[requestId] = new_worker;
+  new_worker.postMessage({ requestId, code, cmd: "execute" });
 }
 
 const getExecutorsCount = () => {

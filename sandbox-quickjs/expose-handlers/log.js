@@ -41,6 +41,10 @@ export class LogHandler {
 
     getLog = () => {
         // console.log("getLog: logArray[] = ", this.logArray);
-        return this.logArray;
+        return [...this.logArray];
+    }
+
+    clearLog = () => {
+        this.logArray = [];
     }
 }
