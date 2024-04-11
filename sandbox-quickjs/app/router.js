@@ -29,6 +29,19 @@ const router = new Router()
         });
         console.info(`[${ctx.state[REQUEST_ID]}] /health :`, JSON.stringify(memoryUsage));
     })
+    .get("/netcheck", async (ctx) => {
+        const { PORT } = getHostPort();
+
+        const checkPort = getQuery(ctx)?.port || PORT;
+        console.log(`[${ctx.state[REQUEST_ID]}] Checking internet access to port: ${checkPort}`);
+        // Check if connection is allowed to the port
+        const res = await checkConnection(checkPort);
+        if (res.ok) {
+            console.warn(`[${ctx.state[REQUEST_ID]}] WARNING: INTERNET Connections allowed on port ${checkPort}`);
+            return ctx.response.body = JSON.stringify({ status: "allowed", message: "Connection allowed" });
+        }
+        return ctx.response.body = JSON.stringify({ status: "denied", message: "Connection refused: " + res.message });
+    })
     .post("/execute", async (ctx) => {
         const requestId = ctx.state[REQUEST_ID];
         let fileName = getQuery(ctx)?.file;
@@ -45,17 +58,7 @@ const router = new Router()
 
         console.log(`[${requestId}] Result`, JSON.stringify(result));
         ctx.response.body = JSON.stringify(result, null, 2);
-    })
-    .get("/netcheck", async (ctx) => {
-        const checkPort = getQuery(ctx)?.port || PORT;
-        console.log(`[${ctx.state[REQUEST_ID]}] Checking internet access to port: ${checkPort}`);
-        // Check if connection is allowed to the port
-        const res = await checkConnection(checkPort);
-        if (res.ok) {
-            console.warn(`[${ctx.state[REQUEST_ID]}] WARNING: INTERNET Connections allowed on port ${checkPort}`);
-            return ctx.response.body = JSON.stringify({ status: "allowed", message: "Connection allowed" });
-        }
-        return ctx.response.body = JSON.stringify({ status: "denied", message: "Connection refused: " + res.message });
     });
+
 
 export default router;
