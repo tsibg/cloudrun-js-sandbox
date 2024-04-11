@@ -2,9 +2,6 @@ FROM denoland/deno:alpine
 
 WORKDIR /usr/src/app
 
-
-## SETUP NETWORK RESTRICTION 
-#@DEPRECATED
 # Install system dependencies
 
 # Cache the dependencies as a layer (the following two steps are re-run only when deps.ts is modified).
