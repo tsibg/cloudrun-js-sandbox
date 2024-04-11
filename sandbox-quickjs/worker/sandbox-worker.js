@@ -1,6 +1,6 @@
-import { config } from "../app/config.js";
+import { config } from "../config/config.js";
 import { getQuickJS, shouldInterruptAfterDeadline } from "../deps.js";
-import { LogHandler } from "../expose-handlers/log.js";
+import { LogHandler } from "../handlers/log.js";
 import { response } from "../helpers/utils.js";
 
 self.onmessage = async (e) => {

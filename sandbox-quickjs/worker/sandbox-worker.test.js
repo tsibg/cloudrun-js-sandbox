@@ -1,6 +1,7 @@
-import { assertEquals, assertNotEquals, assertObjectMatch, assertStrictEquals } from "https://deno.land/std/assert/mod.ts";
+import { assertNotEquals, assertObjectMatch, assertStrictEquals } from "https://deno.land/std/assert/mod.ts";
 import { describe, it, beforeEach, afterEach } from "https://deno.land/std/testing/bdd.ts";
 
+const requestId = "test";
 // Function to handle worker messages
 const workerMessage = (worker) => {
     return new Promise((resolve, reject) => {
@@ -41,7 +42,7 @@ describe('TestSuite: Sandbox Worker', () => {
     });
 
     it('should receive message from worker', async () => {
-        const message = { cmd: "print", message: 'Test message' };
+        const message = { requestId, cmd: "print", message: 'Test message' };
         worker.postMessage(message);
 
         response = await workerMessage(worker);
@@ -51,7 +52,7 @@ describe('TestSuite: Sandbox Worker', () => {
 
     //Test basic code execution in worker
     it('should execute code in worker', async () => {
-        const message = { cmd: "execute", code: '1+2' };
+        const message = { requestId, cmd: "execute", code: '1+2' };
         worker.postMessage(message);
 
         response = await workerMessage(worker);
@@ -61,7 +62,7 @@ describe('TestSuite: Sandbox Worker', () => {
     });
 
     it('should handle code with syntax error', async () => {
-        const message = { cmd: "execute", code: '1+' };
+        const message = { requestId, cmd: "execute", code: '1+' };
         worker.postMessage(message);
 
         response = await workerMessage(worker);
@@ -71,7 +72,7 @@ describe('TestSuite: Sandbox Worker', () => {
     });
 
     it('should handle invalid command', async () => {
-        const message = { cmd: "invalid", code: '1+' };
+        const message = { requestId, cmd: "invalid", code: '1+' };
         worker.postMessage(message);
 
         response = await workerMessage(worker);
@@ -81,7 +82,7 @@ describe('TestSuite: Sandbox Worker', () => {
     });
 
     it('should handle missing code in execute command', async () => {
-        const message = { cmd: "execute" };
+        const message = { requestId, cmd: "execute" };
         worker.postMessage(message);
 
         response = await workerMessage(worker);
@@ -91,7 +92,7 @@ describe('TestSuite: Sandbox Worker', () => {
     });
 
     it('should have the correct permissions', async () => {
-        const message = { cmd: "check" };
+        const message = { requestId, cmd: "check" };
         worker.postMessage(message);
 
         response = await workerMessage(worker);

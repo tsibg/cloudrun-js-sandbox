@@ -31,20 +31,11 @@ describe('TestSuite: Application/Router smoke test', () => {
             assertExists(response.body.memory);
             assertExists(response.body.uptime);
         });
-
-    it(
-        "should return a 400 error for /execute without 'code' or 'file' parameter",
-        async () => {
-            const request = await superoak(application);
-            await request
-                .post("/execute")
-                .expect(400);
-        });
 });
 
 describe('TestSuite: Executor Smoke Test', () => {
     it(
-        "should execute code in worker",
+        "should execute code",
         async () => {
             const request = await superoak(application);
             const response = await request
@@ -54,5 +45,14 @@ describe('TestSuite: Executor Smoke Test', () => {
                 .expect("Content-Type", /json/);
 
             assertObjectMatch(response.body, { error: false, result: 3 });
+        });
+
+    it(
+        "should return a 400 error for /execute without 'code' or 'file' parameter",
+        async () => {
+            const request = await superoak(application);
+            await request
+                .post("/execute")
+                .expect(400);
         });
 });

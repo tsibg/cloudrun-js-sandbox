@@ -1,7 +1,8 @@
-import { config } from "./config.js";
+import { config } from "../config/config.js";
 import { response } from "../helpers/utils.js";
 
-let workers = {};
+const workers = {};
+const workersTimeout = {};
 
 const startAsync = (requestId, code, scriptFile = null) => {
   return new Promise((resolve) => {
@@ -34,34 +35,41 @@ const start = async (requestId, code, scriptFile = null, cb) => {
       },
     }
   );
+
   workers[requestId] = new_worker;
 
-  const new_worker_timeout = setTimeout(() => {
-    workers[requestId].terminate();
+  workersTimeout[requestId] = setTimeout(() => {
     console.log(`[${requestId}] Worker Timeout: Terminating worker`);
-    delete workers[requestId];
-    cb(response({ name: "Worker Timeout", message: `Timeout of ${config.WORKER_TIMEOUT} exceeded.` }, null, [], Date.now() - startTime));
+    terminate(requestId);
+    cb(response({ name: "Executor Timeout", message: `Timeout of ${config.WORKER_TIMEOUT} exceeded.` }, null, [], Date.now() - startTime));
   }, config.WORKER_TIMEOUT);
 
   new_worker.onmessage = (evt) => {
     // console.log("Received by parent: ", evt.data);
-    new_worker_timeout && clearTimeout(new_worker_timeout);
-    delete workers[requestId];
-
+    terminate(requestId);
     cb(evt.data);
   };
+
   new_worker.onerror = (err) => {
     console.error(`[${requestId}] Worker Error: `, err);
-
-    new_worker_timeout && clearTimeout(new_worker_timeout);
-    delete workers[requestId];
-
-    cb(response({ name: "Worker Error", message: err.name }, null, [], Date.now() - startTime));
+    terminate(requestId);
+    cb(response({ name: "Executor Error", message: err.name }, null, [], Date.now() - startTime));
   };
 
   new_worker.postMessage({ requestId, code, cmd: "execute" });
 }
-
+const terminate = (requestId) => {
+  if (workersTimeout[requestId]) {
+    clearTimeout(workersTimeout[requestId]);
+    delete workersTimeout[requestId];
+  }
+  if (workers[requestId]) {
+    workers[requestId].terminate();
+    delete workers[requestId];
+    return true;
+  }
+  return false;
+}
 const getExecutorsCount = () => {
   return Object.keys(workers).length;
 }

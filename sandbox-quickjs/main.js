@@ -2,6 +2,7 @@ import {
     getHostPort,
     checkEnvironment,
 } from "./helpers/utils.js";
+import application from "./app/application.js";
 
 //LOG if environment variables are enabled
 checkEnvironment();

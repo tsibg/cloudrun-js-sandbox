@@ -1,4 +1,4 @@
-import { config } from "./config.js";
+import { config } from "../config/config.js";
 import { Router, getQuery } from "../deps.js";
 import { startAsync, getExecutorsCount } from "./executor.js";
 import {
