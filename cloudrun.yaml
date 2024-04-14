@@ -16,7 +16,7 @@ spec:
       - image: eu.gcr.io/preparsed/sandbox-quickjs:latest
         ports:
         - name: http1
-          containerPort: 8080
+          containerPort: 8081
         resources:
           limits:
             cpu: 1000m
@@ -28,11 +28,11 @@ spec:
           failureThreshold: 1
           httpGet:
             path: /health
-            port: 8080
+            port: 8081
         startupProbe:
           initialDelaySeconds: 0
           timeoutSeconds: 240
           periodSeconds: 240
           failureThreshold: 1
           tcpSocket:
-            port: 8080
+            port: 8081

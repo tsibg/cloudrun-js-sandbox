@@ -77,7 +77,7 @@ const getExecutorsCount = () => {
 const readScriptFile = async (requestId, filename) => {
   let fileContent = "";
   try {
-    const textContent = await Deno.readTextFile(filename);
+    const textContent = await Deno.readTextFile(config.EXAMPLES_DIR + filename);
     fileContent += "\n" + textContent + "\n";
   } catch (err) {
     console.error(`[${requestId}] Read file: Error reading file[${filename}]: `, err);

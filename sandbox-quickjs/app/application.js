@@ -6,9 +6,10 @@ const application = new Application();
 application
     .use(requestIdMiddleware)
     .use(async (ctx, next) => {
-        //Middleware
+        //Middleware to log request
         console.log(`[${ctx.state[REQUEST_ID]}] ${ctx.request.method} ${ctx.request.url}`);
         await next();
+        //Set response type to JSON
         ctx.response.type = "json";
     })
     .use(router.routes())

@@ -4,7 +4,7 @@ import { assertEquals, assertExists, assertNotEquals, assertObjectMatch } from "
 
 import application from "./app/application.js";
 
-describe('TestSuite: Application/Router smoke test', () => {
+describe('TS: Application/Router smoke test', () => {
 
     it(
         "should return a JSON response with status UP",
@@ -33,7 +33,7 @@ describe('TestSuite: Application/Router smoke test', () => {
         });
 });
 
-describe('TestSuite: Executor Smoke Test', () => {
+describe('TS: Executor Smoke Test', () => {
     it(
         "should execute code",
         async () => {

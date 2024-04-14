@@ -1,4 +1,5 @@
 {
+    "deno.enable": true,
     "yaml.schemas": {
         "https://json.schemastore.org/cloudbuild.json": "file:///d%3A/dev/nodejs/gcp-run/sandbox-quickjs-deno/cloudbuild.yaml"
     },
