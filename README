@@ -24,12 +24,18 @@ This setup *should* provide a secure, isolated, and efficient environment for ru
 
 **I developed this project for hobby/evaluation purposed, it comes with NO WARRANTIES. It needs future Security evaluations.**
 
-## Deploy
+## Deploy in Cloud Run
 
 Please, setup your service names and regions inside `cloudbuild.yaml` and `cloudrun.yaml`.
 
 ```
 gclouds builds submit
+```
+
+## Run with Docker Compose
+
+```
+docker compose up --build
 ```
 
 ## Development
