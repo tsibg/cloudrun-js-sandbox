@@ -1,14 +1,20 @@
 # JS Sandbox Backend for CloudRun/Docker
-
+*Under development*
 JavaScript Sandbox designed to run in Cloud Run or Docker environments.
 
-## Description
+Providing API for safe execution of JavaScript code server-side.
 
 Built using (QuickJS-emscripten)[https://github.com/justjake/quickjs-emscripten], Deno, Deno Workers and Docker Containers.
 
-An ingress sidecar container is used to proxy incoming requests for network isolation of the sandbox microservice. The ingress container also serves a sample frontend for demonstration and testing purposes. This sidecar is built with Bun, which claims its effectiveness in serving requests.
+## Description
 
 The project leverages Cloud Run's gVisor and Docker containers to provide the necessary isolation of the services.
+
+**ingress-sidecar** service is used to proxy incoming requests for purposes of network isolation of the sandbox microservice. The ingress container also serves a sample frontend for demonstration and testing purposes.
+This service is built with Bun, which claims its effectiveness in serving requests.
+
+**sandbox-quickjs** service provides the execution API, running on top of Deno, spawns Deno Worker, which execute code with QuckJS-emscripten.
+
 QuickJS as an efficient JavaScript interpreter, ensures that the executed code is entirely sandboxed from the host service. quickjs-emscripten provides QuickJS in WASM environment and the ability to execute the sandbox from JS host. Also, provides an easy API to expose additional functionality. TBD more docs.
 
 Deno provides granular security restrictions in order to ensure further developments are not exposing APIs which provides more access than needed.
@@ -30,7 +36,7 @@ gclouds builds submit
 
 @ToDo: Documentation will be updated soon.
 
-## ToDo List
+### ToDo List
 1. Use envsubst for filling `cloudrun.yaml` with the variables available from `cloudbuild.yaml`
 2. Update `cloudbuild.yaml` to exclude the extra deploy step, which is currently needed in order `service replace` to work.
 3. Write tests to the ingress service
