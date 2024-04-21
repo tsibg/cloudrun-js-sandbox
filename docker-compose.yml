@@ -1,5 +1,19 @@
 version: '3'
 services:
+  ingress-sidecar:
+    build:
+      context: ./ingress-sidecar/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - API_HOST=sandbox-quickjs
+      - API_PORT=8081
+    networks:
+    - intranet
+    - default
   sandbox-quickjs:
     build:
       context: ./sandbox-quickjs/
@@ -10,8 +24,11 @@ services:
     environment:
       - HOST=sandbox-quickjs
       - PORT=8081
-    # networks:
-    # - intranet
-# networks:
-#   intranet:
-#     internal: true
+    networks:
+    - intranet
+networks:
+  intranet:
+    driver: overlay
+    internal: true
+  default:
+    driver: bridge

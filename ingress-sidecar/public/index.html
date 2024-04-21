@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>JS Sandbox API</title>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="wrapper">
+        <h1>JS Sandbox</h1>
+        <h2>Demo Interface</h2>
+        <div>
+            <button id="infoBtn">Info</button>
+            <button id="healthBtn">Health check</button>
+            <button id="netcheckBtn">Network check</button>
+        </div>
+        <p>Enter your JavaScript code in the textarea below and click the "Run" button to execute it.
+            For example, try entering:<br />
+            <code>console.log('Hello, World!');</code>
+        </p>
+        <div class="container">
+            <section>
+                <h3>Code</h3>
+                <div id="code-wrapper">
+                    <textarea id="code" rows="10"></textarea>
+                </div>
+                <div id="actions">
+                    <button id="clearBtn">Clear</button>
+                    <button id="executeBtn" class="btn-primary">RUN &gt;</button>
+                </div>
+            </section>
+            <section>
+                <h3>Output</h3>
+                <div id="output-wrapper">
+                    <pre id="output"></pre>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+
+</html>

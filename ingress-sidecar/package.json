@@ -1,0 +1,14 @@
+{
+  "name": "ingress-traffic",
+  "description": "Ingress Traffic",
+  "module": "index.js",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "bun run index.js",
+    "dev": "bun run --watch index.js"
+  },
+  "devDependencies": {},
+  "peerDependencies": {},
+  "dependencies": {}
+}

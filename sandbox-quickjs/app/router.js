@@ -6,7 +6,8 @@ import {
     getMemoryUsage,
     getPostParams,
     checkConnection,
-    getHostPort
+    getHostPort,
+    response
 } from "../helpers/utils.js";
 
 const started = new Date();
@@ -39,9 +40,17 @@ const router = new Router()
         const res = await checkConnection(checkPort);
         if (res.ok) {
             console.warn(`[${ctx.state[REQUEST_ID]}] WARNING: INTERNET Connections allowed on port ${checkPort}`);
-            return ctx.response.body = JSON.stringify({ status: "allowed", message: "Connection allowed" });
+            return ctx.response.body = JSON.stringify({
+                status: "allowed",
+                port: checkPort,
+                message: "Warning: Outgoing connection allowed"
+            });
         }
-        return ctx.response.body = JSON.stringify({ status: "denied", message: "Connection refused: " + res.message });
+        return ctx.response.body = JSON.stringify({
+            status: "restricted",
+            port: checkPort,
+            message: "Network restricted. Outgoing connection refused: " + res.message
+        });
     })
     .post("/execute", async (ctx) => {
         const requestId = ctx.state[REQUEST_ID];
@@ -51,7 +60,7 @@ const router = new Router()
         const code = postParams?.code;
 
         if (!code && !fileName) {
-            ctx.throw(400, "Required 'code' or 'file' parameter");
+            ctx.throw(400, JSON.stringify(response("Required 'code' or 'file' parameter")));
         }
         console.log(`[${requestId}] Executing script: `, fileName, " | Custom code: " + JSON.stringify(code));
 

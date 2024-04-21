@@ -9,5 +9,5 @@ export const config = {
     WORKER_TIMEOUT: 2500,
 
     EXAMPLES_DIR: "./example-scripts/",
-    VERSION: '0.0.6'
+    VERSION: '0.1.0'
 };
