@@ -1,0 +1,32 @@
+# JS Sandbox Backend for CloudRun/Docker
+
+## Description
+
+This project is a JavaScript Sandbox designed to run in CloudRun or Docker environments.
+The sandbox part is built using (QuickJS-emscripten)[https://github.com/justjake/quickjs-emscripten], which is executed inside a Deno Worker. Deno runtime is used for the sandbox container, providing granular security policies that allow for the restriction of the entire runtime and its environment.
+
+An ingress sidecar container is used to proxy incoming requests for network isolation of the sandbox microservice. The ingress container also serves a sample frontend for demonstration and testing purposes. This sidecar is built with Bun, which claims its effectiveness in serving requests.
+
+The project leverages Docker and Cloud Run's gVisor to provide the necessary isolation. QuickJS, a highly efficient JavaScript interpreter, ensures that the executed code is entirely sandboxed from the host service. Deno provides granular security restrictions in order to ensure further developers that they are not exposing APIs or packages to sandbox which gives more functionality than needed. Workers are used for concurrency and for effectively applying execution timeouts.
+
+This setup *should* provide a secure, isolated, and efficient environment for running JavaScript code.
+
+**I developed this project for hobby/evaluation purposed, it comes with NO WARRANTIES. It needs future Security evaluations.**
+
+## Deploy
+
+Please, setup your service names and regions inside `cloudbuild.yaml` and `cloudrun.yaml`.
+
+```
+gclouds builds submit
+```
+
+## Development
+
+@ToDo: Documentation will be updated soon.
+
+## ToDo List
+1. Use envstub for filling `cloudrun.yaml` with the variables available in `cloudbuild.yaml`
+2. Write tests to the ingress service
+3. Add descriptions on how to use and further develop based on this repo
+4. Add the availability to provide code from URL, S3, GCS
