@@ -1,26 +1,24 @@
 # JS Sandbox Backend for CloudRun/Docker
 *Under development*
-JavaScript Sandbox designed to run in Cloud Run or Docker environments.
-
-Providing API for safe execution of JavaScript code server-side.
+JavaScript Sandbox designed to run in Cloud Run or Docker environments. Provides API for safe execution of JavaScript code server-side.
 
 Built using (QuickJS-emscripten)[https://github.com/justjake/quickjs-emscripten], Deno, Deno Workers and Docker Containers.
 
 ## Description
 
-The project leverages Cloud Run's gVisor and Docker containers to provide the necessary isolation of the services.
+The project leverages Cloud Run's gVisor and Docker containers to provide the necessary isolation of the sandbox service.
 
 **ingress-sidecar** service is used to proxy incoming requests for purposes of network isolation of the sandbox microservice. The ingress container also serves a sample frontend for demonstration and testing purposes.
 This service is built with Bun, which claims its effectiveness in serving requests.
 
 **sandbox-quickjs** service provides the execution API, running on top of Deno, spawns Deno Worker, which execute code with QuckJS-emscripten.
 
-QuickJS as an efficient JavaScript interpreter, ensures that the executed code is entirely sandboxed from the host service. quickjs-emscripten provides QuickJS in WASM environment and the ability to execute the sandbox from JS host. Also, provides an easy API to expose additional functionality. TBD more docs.
+QuickJS as an efficient JavaScript interpreter, ensures that the executed code is entirely sandboxed from the host service. quickjs-emscripten provides QuickJS in WASM environment and the ability to execute sandboxed code from JS host. Also, provides an easy API to expose additional functionality. TBD more docs.
 
 Deno provides granular security restrictions in order to ensure further developments are not exposing APIs which provides more access than needed.
 Deno Workers are used for concurrency and for effectively applying execution timeouts.
 
-This setup *should* provide a secure, isolated, and efficient environment for running JavaScript code.
+This setup *should* provide a secure, isolated, and efficient environment for running JavaScript code server-side.
 
 **I developed this project for hobby/evaluation purposed, it comes with NO WARRANTIES. It needs future Security evaluations.**
 
