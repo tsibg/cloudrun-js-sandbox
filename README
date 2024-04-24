@@ -2,7 +2,7 @@
 
 _Under development_
 
-JavaScript Sandbox designed to run in GCP Cloud Run or Docker Compose. Provides
+JavaScript Sandbox backend designed to run in GCP Cloud Run or Docker Compose. Provides
 REST API for execution of user-provided JavaScript code server-side.
 
 Built in JavaScript with
@@ -13,7 +13,7 @@ This setup _**should**_ provide a secure*, isolated, and efficient environment
 for running untrusted JavaScript code server-side.
 
 ***I developed this project for hobby/evaluation purposed. NO
-WARRANTIES. It needs future Security evaluations.**
+WARRANTIES PROVIDED. It needs future Security evaluations.**
 
 ## Description
 
@@ -129,3 +129,6 @@ docker compose up --build
    sandbox service.
 6. Add rate limits in the ingress service
 7. Test under pressure
+
+### License
+[MIT License](https://opensource.org/license/mit)
